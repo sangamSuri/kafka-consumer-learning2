@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: demo
+
+  lifecycle:
+    timeout-per-shutdown-phase: 45s
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    properties:
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+    listener:
+      observation-enabled: true
+
+server:
+  shutdown: graceful
+
+app:
+  kafka:
+    topic: orders
+    dlt-topic: orders.DLT
+    pod-id: ${HOSTNAME:local}
+    groups:
+      billing:
+        group-id: billing-service
+        concurrency: 3
+        max-poll-records: 50
+        max-poll-interval-ms: 300000
+      shipping:
+        group-id: shipping-service
+        concurrency: 3
+        max-poll-records: 100
+        max-poll-interval-ms: 300000
+      notification:
+        group-id: notification-service
+        concurrency: 3
+        max-poll-records: 200
+        max-poll-interval-ms: 120000
+      analytics:
+        group-id: analytics-service
+        concurrency: 2
+        max-poll-records: 1000
+        max-poll-interval-ms: 600000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: order-consumers

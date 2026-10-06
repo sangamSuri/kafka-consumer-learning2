@@ -1,0 +1,4 @@
+services:
+  order-consumer:
+    ports:
+      - "8080:8080"

@@ -1,0 +1,18 @@
+# Kafka transport security. Activate with --spring.profiles.active=security
+# (or SPRING_PROFILES_ACTIVE=security) in environments where the broker is not PLAINTEXT.
+# All secrets come from env vars - never hardcode credentials here.
+app:
+  kafka:
+    security:
+      enabled: true
+      protocol: ${KAFKA_SECURITY_PROTOCOL:SASL_SSL}
+      sasl-mechanism: ${KAFKA_SASL_MECHANISM:SCRAM-SHA-512}
+      username: ${KAFKA_SASL_USERNAME:}
+      password: ${KAFKA_SASL_PASSWORD:}
+      ssl:
+        trust-store-location: ${KAFKA_SSL_TRUSTSTORE_LOCATION:}
+        trust-store-password: ${KAFKA_SSL_TRUSTSTORE_PASSWORD:}
+        key-store-location: ${KAFKA_SSL_KEYSTORE_LOCATION:}
+        key-store-password: ${KAFKA_SSL_KEYSTORE_PASSWORD:}
+        key-password: ${KAFKA_SSL_KEY_PASSWORD:}
+        endpoint-identification-algorithm: ${KAFKA_SSL_ENDPOINT_ID_ALGORITHM:https}
